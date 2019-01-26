@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>角色管理</title>
+<!-- Tell the browser to be responsive to screen width -->
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+
+<!-- Pace -->
+<link rel="stylesheet"
+	href="../../plugins/pace-master/themes/blue/pace-theme-flash.css">
+<script type="text/javascript"
+	src="../../plugins/pace-master/pace.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="../../dist/css/font-awesome.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="../../dist/css/ionicons.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
+<!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+<link rel="stylesheet" href="../../dist/css/skins/all-skins.min.css">
+
+<!-- DataTables -->
+<link rel="stylesheet"
+	href="../bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+<!-- Select2 -->
+<link rel="stylesheet"
+	href="../bower_components/select2/dist/css/select2.min.css">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<style>
+.example-modal .modal {
+	position: relative;
+	top: auto;
+	bottom: auto;
+	right: auto;
+	left: auto;
+	display: block;
+	z-index: 1;
+}
+
+.example-modal .modal {
+	background: transparent !important;
+}
+</style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+	<!-- Main content -->
+	<section class="content">
+		<form class="form-horizontal">
+			<!-- form start -->
+			<div class="box-body">
+				<div class="form-group">
+					<div class="col-sm-12">
+						<button id="addRoleBtn" type="button"
+							class="btn btn-info pull-right" data-toggle="modal"
+							data-target="#modal-info-add">新增</button>
+					</div>
+				</div>
+
+			</div>
+		</form>
+		<!-- /.box-body -->
+		<div class="box">
+			<div class="box-header"></div>
+			<!-- /.box-header -->
+			<div class="box-body">
+				<table id="example1" class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th>角色</th>
+							<th>权限</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody id="tbodyId">
+
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+
+	</section>
+	<!-- /.modal -->
+	<div class="modal modal-info fade" id="modal-info-add">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">新增角色</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group has-feedback">
+						<label for="addRoleNameId">角色名称：</label> <input type="text"
+							class="form-control" id="addRoleNameId" placeholder=""> <span
+							class="glyphicon glyphicon-user form-control-feedback"></span>
+					</div>
+					<div class="form-group">
+						<label for="addPermSelId">权限：</label> <select id="addPermSelId"
+							style="width: 100%" class="form-control select2"
+							multiple="multiple" data-placeholder="">
+							<option value="0">Alabama</option>
+							<option value="1">Alaska</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button id="canleAddBtn" type="button"
+					class="btn btn-outline pull-left" data-dismiss="modal">取消</button>
+				<button id="confirmAddBtn" type="button" class="btn btn-outline"
+					data-dismiss="modal">确定</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+	<!-- /.modal -->
+	<div class="modal modal-info fade" id="modal-info-edit">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">修改角色</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group has-feedback">
+						<label for="editRoleNameId">角色名称：</label> <input type="text"
+							class="form-control" id="editRoleNameId" placeholder="">
+						<span class="glyphicon glyphicon-user form-control-feedback"></span>
+					</div>
+					<div class="form-group">
+						<label for="editPermSelId">权限：</label> <select id="editPermSelId"
+							style="width: 100%" class="form-control select2"
+							multiple="multiple" data-placeholder="">
+							<option value="0">Alabama</option>
+							<option value="1">Alaska</option>
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button id="canleEditBtn" type="button"
+						class="btn btn-outline pull-left" data-dismiss="modal">取消</button>
+					<button id="confirmEditBtn" type="button" class="btn btn-outline"
+						data-dismiss="modal">确定</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+	<!-- /.modal -->
+
+	<div class="modal modal-danger fade" id="modal-danger">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">警告</h4>
+				</div>
+				<div class="modal-body">
+					<p id="confirmDelId">确认删除该角色吗？？？</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-outline pull-left"
+						data-dismiss="modal">关闭</button>
+					<button id="delBtn" type="button" class="btn btn-outline"
+						data-dismiss="modal">确认</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+	<!-- /.modal -->
+
+	<div class="modal modal-success fade" id="modal-success">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">提示</h4>
+				</div>
+				<div class="modal-body">
+					<p id="infoId">!</p>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+	<!-- jQuery 2.2.3 -->
+	<script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<!-- Bootstrap 3.3.6 -->
+	<script src="../../bootstrap/js/bootstrap.min.js"></script>
+	<!-- FastClick -->
+	<script src="../../plugins/fastclick/fastclick.js"></script>
+	<!-- AdminLTE App -->
+	<script src="../../dist/js/app.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="../../dist/js/demo.js"></script>
+	<!-- DataTables -->
+	<script
+		src="../bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+	<script
+		src="../bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+	<!-- Select2 -->
+	<script src="../bower_components/select2/dist/js/select2.full.min.js"></script>
+	<script type="text/javascript">
+	    var delRoleId = 0;
+	    var delRoleName = null;
+	    var editRoleId = 0;
+	    var isFirst = true;
+	    var roleList = null;
+	    var permList = null;
+		$(function() {
+			$('.select2').select2({placeholder: "请选择权限"});
+			refreshRoleList();	
+			$("#addRoleBtn").click(function(){
+				clearAddFormValue();
+			});
+				
+			
+			$("#confirmAddBtn").click(function() {
+				
+				var roleInfo = {
+					name : $("#addRoleNameId").val().trim(),
+					permidList: $("#addPermSelId").val()
+				};
+				$.ajax({
+					url : "/taizhang/sys/addRole",
+					type : "post",
+					data : JSON.stringify(roleInfo),
+					dataType : "json",
+					contentType : "application/json;charset=UTF-8",
+					success : function(data) {
+						console.log('新增角色成功！');
+						refreshRoleList();
+						alertMessage("新增角色成功！");
+						clearAddFormValue();
+					}
+				});
+			});
+			$("#confirmEditBtn").click(function() {
+				
+				if(editRoleId!=0){
+					var roleInfo = {
+			    			id:editRoleId,
+			        		name:$("#editRoleNameId").val().trim(),
+			        		permidList: $("#editPermSelId").val()
+			        	};
+			       	$.ajax({
+			       		url:"/taizhang/sys/updateRole",
+			       		type:"post",
+			       		data:JSON.stringify(roleInfo),
+			       		dataType:"json",
+			       		contentType:"application/json;charset=UTF-8",
+			       		success:function(data){
+			       			console.log('修改角色成功！');
+			       			editRoleId = 0;
+			       			refreshRoleList();
+			       			alertMessage("修改角色成功！");			       			
+							$("#editPermSelId").val(null);
+							$("#editPermSelId").trigger("change");
+							$("#editRoleNameId").val("");
+			       		}
+			       	});
+				}
+					
+			});
+			$("#delBtn").click(function() {				
+				console.log(delRoleId+delRoleName);
+				if(delRoleId != 0 && delRoleName!=null){
+					$.ajax({
+						url:"/taizhang/sys/deleteRole",
+						type:"post",
+						data:{id:delRoleId},
+						contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+						dataType:"json",
+						success:function(data){
+							delRoleId = 0;
+							delRoleName = null;
+							if(data.result == "success"){
+								refreshRoleList();
+								alertMessage("删除成功!");								
+							}else{
+								$('#infoId').html("删除失败，还有用户使用该角色!!!");
+								$('#modal-success').modal('show');													
+							}
+							
+							
+						}
+					});
+				}else{
+					console.log('没有选中用户');
+				}
+			});
+			
+			
+			
+		});
+		function refreshRoleList(){
+			 var queryData = {name:"no param"};
+			 $.ajax({
+				url:"/taizhang/sys/roleList",
+				type:"post",
+				data:JSON.stringify(queryData),
+				dataType:"json",
+				contentType:"application/json;charset=UTF-8",
+				success:function(data){
+					console.log("search success");
+					roleList = data.roleList;
+					permList = data.permList;
+					
+					$("#tbodyId").empty();
+					
+					for (var i in roleList){
+						var roleInfo = roleList[i];
+						
+						var tr = $("<tr></tr>");
+						
+						//角色名称
+						var tdName = $("<td></td>");
+						tdName.append("<p>"+roleList[i].name+"</p>");
+						
+						//权限
+						var tdPerm = $("<td></td>");
+						var permStr = "";
+						for(var j in roleInfo.permList){
+							permStr += roleInfo.permList[j].name+"、";
+						}
+						tdPerm.html(permStr);
+						
+						//操作
+						var tdOper = $("<td></td>");
+						var edit = $("<a>编辑</a>");
+						edit.attr("href","#");
+						edit.attr("onclick","edit_role("+roleInfo.id+",'"+roleInfo.name+"')")
+						var del =  $("<a>删除</a>");
+						del.attr("href","#");
+						del.attr("onclick","del_role("+roleInfo.id+",'"+roleInfo.name+"')");
+						del.attr("data-toggle","modal");
+						del.attr("data-target","#modal-danger");
+						tdOper.append(edit);
+						tdOper.append("|");
+						tdOper.append(del);
+						
+						
+						tr.append(tdName);
+						tr.append(tdPerm);
+						tr.append(tdOper);
+						$("#tbodyId").append(tr);
+					} 
+					
+					$("#addPermSelId").empty();
+					$("#editPermSelId").empty();
+					for (var i in permList){						
+						var opt1 = $("<option></option>");
+						var opt2 = $("<option></option>");
+						opt1.html(permList[i].name);
+						opt2.html(permList[i].name);
+						opt1.attr("value",permList[i].id);
+						opt2.attr("value",permList[i].id);
+						$("#addPermSelId").append(opt1);
+						$("#editPermSelId").append(opt2);
+					}
+					
+					if (isFirst) {
+						isFirst = false;
+						$('#example1').DataTable({
+						      'paging'      : true,
+						      'lengthChange': false,
+						      'searching'   : false,
+						      'ordering'    : true,
+						      'info'        : true,
+						      'autoWidth'   : false
+						 });
+					}
+					
+				},
+				error:function(xhr,status,error){
+					console.log(xhr);
+					console.log(status);
+					console.log(error);
+				}
+			}); 
+		}
+		function edit_role(roleid,rolename) {
+			for(var i in roleList){
+				if(roleList[i].id == roleid){
+					
+					editRoleId = roleid;
+					var role = roleList[i];
+					var permList = role.permList;
+					var permIdList = [];
+					for(var j in permList){
+						permIdList.push(permList[j].id);
+					}
+					console.log(permIdList);					
+					$("#editPermSelId").val(permIdList);
+					$('#editPermSelId').trigger('change');
+					$("#editRoleNameId").val(role.name);
+					$('#modal-info-edit').modal('show');
+					
+					
+					
+					break;
+				}
+			}	
+		}
+		function del_role(roleid,rolename){
+			delRoleId = roleid;
+			delRoleName = rolename;
+			$("#confirmDelId").html("确认删除 "+rolename+" 吗??");
+		}
+		function clearAddFormValue(){
+			$("#addRoleNameId").val("");
+			$('#addPermSelId').val(null);
+			$('#addPermSelId').trigger('change');
+		}
+		function alertMessage(msg){
+			$('#infoId').html(msg);
+			$('#modal-success').modal('show');
+			setTimeout(() => {
+				$('#modal-success').modal('hide');
+			}, 1000);
+		}
+	</script>
+</body>
+</html>

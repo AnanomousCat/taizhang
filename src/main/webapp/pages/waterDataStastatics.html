@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>供水统计</title>
+<!-- Tell the browser to be responsive to screen width -->
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<!-- Bootstrap 3.3.6 -->
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="../dist/css/font-awesome.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="../dist/css/ionicons.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
+<!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+<link rel="stylesheet" href="../dist/css/skins/all-skins.min.css">
+<!-- bootstrap datepicker -->
+<link rel="stylesheet" href="plugins/datepicker/datepicker3.css">
+<!-- Select2 -->
+<link rel="stylesheet"
+	href="bower_components/select2/dist/css/select2.min.css">
+
+<!-- iCheck for checkboxes and radio inputs -->
+<link rel="stylesheet" href="../plugins/iCheck/all.css">
+
+<!-- DataTables -->
+<link rel="stylesheet"
+	href="../plugins/datatables/dataTables.bootstrap.css">
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body class="hold-transition skin-blue">
+	<!-- Content Wrapper. Contains page content -->
+
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="row">
+			<div class="col-md-12">
+				<!-- AREA CHART -->
+				<div class="box box-primary">
+					<div class="box-header with-border">
+						<h3 class="box-title">查询条件</h3>
+
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
+						<!-- form start -->
+						<div class="box-body">
+							<form class="form-horizontal">
+								<!-- Date range -->
+								<div class="form-group">
+
+									<div class="col-sm-9">
+										<div class="col-sm-5"
+											style="padding-left: 0px; padding-right: 0px">
+											<select id="startTimeId" class="form-control pull-left">
+
+											</select>
+										</div>
+										<div class="col-sm-2" style="text-align: center;">
+											<label class="control-label pull-center">至</label>
+										</div>
+										<div class="col-sm-5"
+											style="padding-left: 0px; padding-right: 0px">
+											<select id="endTimeId" class="form-control pull-left">
+
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<label> <input id="yearId" name="r3" type="radio"
+											value="year" class="flat-red" checked>年
+										</label> <label> <input id="monthId" name="r3" type="radio"
+											value="month" class="flat-red">月
+										</label>
+									</div>
+								</div>
+
+
+								<div class="form-group">
+									<div class="col-sm-9">
+										<select id="regionSelId" class="form-control select2"
+											multiple="multiple" data-placeholder="">
+
+										</select>
+									</div>
+									<div class="col-sm-2">
+										<button id="searchBtn" type="button"
+											class="btn btn-info pull-left">查询</button>
+									</div>
+								</div>
+								<div class="form-group"></div>
+							</form>
+						</div>
+
+					</div>
+					<!-- /.box-body -->
+				</div>
+				<!-- /.box -->
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<!-- DONUT CHART -->
+				<div class="box box-default ">
+					<div class="box-header with-border">
+						<h3 class="box-title">列表</h3>
+
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+
+						</div>
+					</div>
+					<div class="box-body" >
+						<div class="nav-tabs-custom">
+							<ul class="nav nav-tabs">
+								<li class="active"><a href="#table_tab_1" data-toggle="tab">项目</a></li>
+								<li><a href="#table_tab_2" data-toggle="tab">农业和非农业</a></li>
+								<li><a href="#table_tab_3" data-toggle="tab">农业、生态和工业</a></li>
+							</ul>
+						</div>
+						<div class="tab-content">
+							<div class="tab-pane active" id="table_tab_1">
+								<table id="example1" class="table table-bordered table-striped">
+									<thead id="theadId1">
+										<tr>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody id="tbodyId1">
+
+									</tbody>
+								</table>
+							</div>
+							<div class="tab-pane" id="table_tab_2">
+								<table id="example2" class="table table-bordered table-striped">
+									<thead id="theadId2">
+										<tr>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody id="tbodyId2">
+
+									</tbody>
+								</table>
+							</div>
+							<div class="tab-pane" id="table_tab_3">
+								<table id="example3" class="table table-bordered table-striped">
+									<thead id="theadId3">
+										<tr>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody id="tbodyId3">
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- /.box -->
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="box box-warning">
+					<div class="box-header with-border">
+						<h3 class="box-title">饼图</h3>
+
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+
+						</div>
+					</div>
+					<div class="box-body" style="height: 500px">
+						<div class="nav-tabs-custom">
+							<ul class="nav nav-tabs">
+								<li class="active"><a href="#pie_tab_1" data-toggle="tab">项目</a></li>
+								<li><a href="#pie_tab_2" data-toggle="tab">农业和非农业</a></li>
+								<li><a href="#pie_tab_3" data-toggle="tab">农业、生态和工业</a></li>
+							</ul>
+						</div>
+						<div class="tab-content">
+							<div class="tab-pane active " style="height: 450px; width: 600px"
+								id="pie_tab_1"></div>
+							<div class="tab-pane " id="pie_tab_2"
+								style="height: 450px; width: 600px"></div>
+							<div class="tab-pane  " id="pie_tab_3"
+								style="height: 450px; width: 600px"></div>
+
+						</div>
+
+						<!-- /.box-body -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.row -->
+		<div class="row">
+			<div class="col-md-12">
+				<!-- LINE CHART -->
+				<div class="box box-info">
+					<div class="box-header with-border">
+						<h3 class="box-title">条形图</h3>
+
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+
+						</div>
+					</div>
+					<div class="box-body" style="height: 500px">
+						<div id="barId" class="col-md-12" style="height: 450px;"></div>
+					</div>
+					<!-- /.box-body -->
+				</div>
+				<!-- /.box -->
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<!-- BAR CHART -->
+				<div class="box box-success">
+					<div class="box-header with-border">
+						<h3 class="box-title">折线图</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+
+						</div>
+					</div>
+					<div class="box-body">
+						<div class="chart col-md-12" id="lineId" style="height: 450px;">
+
+						</div>
+					</div>
+					<!-- /.box-body -->
+				</div>
+				<!-- /.box -->
+
+			</div>
+		</div>
+		<!-- /.col (RIGHT) -->
+	</section>
+	<!-- /.content -->
+
+	<!-- jQuery 2.2.3 -->
+	<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<!-- Bootstrap 3.3.6 -->
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+	<!-- ChartJS 1.0.1 -->
+	<script src="../plugins/chartjs/Chart.min.js"></script>
+	<!-- FastClick -->
+	<script src="../plugins/fastclick/fastclick.js"></script>
+	<!-- AdminLTE App -->
+	<script src="../dist/js/app.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="../dist/js/demo.js"></script>
+
+	<!-- Select2 -->
+	<script src="bower_components/select2/dist/js/select2.full.min.js"></script>
+
+	<!-- iCheck 1.0.1 -->
+	<script src="../plugins/iCheck/icheck.min.js"></script>
+
+	<!-- DataTables -->
+	<script src="../plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="../plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<!-- 引入 ECharts 文件 -->
+	<script src="echarts.min.js"></script>
+	<script src="waterDataStastatics.js"></script>
+	<!-- page script -->
+	</body>
+</html>

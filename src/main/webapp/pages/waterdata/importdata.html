@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>数据录入</title>
+<!-- Tell the browser to be responsive to screen width -->
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+
+<!-- Pace -->
+<link rel="stylesheet"
+	href="../../plugins/pace-master/themes/blue/pace-theme-flash.css">
+<script type="text/javascript"
+	src="../../plugins/pace-master/pace.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="../../dist/css/font-awesome.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="../../dist/css/ionicons.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
+<!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+<link rel="stylesheet" href="../../dist/css/skins/all-skins.min.css">
+<!-- Select2 -->
+<link rel="stylesheet"
+	href="../bower_components/select2/dist/css/select2.min.css">
+<!-- timepicker -->
+<link rel="stylesheet"
+	href="../bower_components/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css">
+
+<!-- DataTables -->
+<link rel="stylesheet"
+	href="../../plugins/datatables/dataTables.bootstrap.css">
+<link rel="stylesheet"
+	href="../../plugins/datatables/select.dataTables.min.css">
+
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<style>
+.example-modal .modal {
+	position: relative;
+	top: auto;
+	bottom: auto;
+	right: auto;
+	left: auto;
+	display: block;
+	z-index: 1;
+}
+
+.example-modal .modal {
+	background: transparent !important;
+}
+</style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+	<!-- Main content -->
+	<section class="content">
+		<form class="form-horizontal" enctype="multipart/form-data">
+			<!-- form start -->
+			<div class="row">
+				<div class="col-md-12">
+					<div class="box-body">
+						<div class="form-group">
+							<label for="waterTimeId" class="col-md-1 control-label">
+								供水时间： </label>
+							<div class="col-md-2">
+								<input type="text" class="form-control" id="waterTimeId">
+							</div>
+							<label for="createTimeId" class="col-md-1 control-label">
+								录入时间： </label>
+							<div class="col-md-2">
+								<input type="text" class="form-control" id="createTimeId">
+							</div>
+							<label for="inputEmail3" class="col-md-1 control-label">
+								审核状态： </label>
+							<div class="col-md-2">
+								<select id="checkSelId" class="form-control select2"
+									data-placeholder="">
+									<option value='0' checked>待提交审核</option>
+									<option value='1'>待科室审核</option>
+									<option value='2'>科室退回</option>
+									<option value='3'>待中心审核</option>
+									<option value='4'>中心退回</option>
+									<option value='5'>归档</option>
+								</select>
+							</div>
+						</div>
+
+
+						<div class="form-group">
+							<div class="col-md-9">
+								<select id="regionSelId" class="form-control select2"
+									multiple="multiple" data-placeholder="">
+								</select>
+							</div>
+							<div class="col-md-2">
+								<button id="searchBtn" type="button"
+									class="btn btn-info pull-left">查询</button>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</form>
+		<!-- /.box-body -->
+		<div class="box">
+			<div class="box-header"></div>
+			<!-- /.box-header -->
+			<div class="row">
+				<div class="form-group">
+					<div class="col-md-12" style="text-align: right;">
+						<button id="submitCheck" type="button" class="btn btn-warning ">提交审核</button>
+						<button id="upLoadFile" type="button" class="btn btn-success ">Excel上传</button>
+						<button id="addWaterBtn" type="button" class="btn btn-primary ">新增</button>
+						<button id="editWaterBtn" type="button" class="btn btn-info ">编辑</button>
+						<button id="delWaterBtn" type="button" class="btn btn-danger ">删除</button>
+						<input style="display: none;" type="file" name="file"
+							id="upInputId" onchange="uploadFile()">
+					</div>
+				</div>
+			</div>
+			<div class="box-body">
+				<table id="example1" class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th>项目</th>
+							<th>月份</th>
+							<th>供水量</th>
+							<th>审核状态</th>
+						</tr>
+					</thead>
+					<tbody id="tbodyId">
+
+
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+
+		<!-- /.modal -->
+	</section>
+	<!-- /.modal -->
+
+	<div class="modal modal-danger fade" id="modal-danger">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">错误</h4>
+				</div>
+				<div class="modal-body">
+					<p id="dangerId">!</p>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+	<!-- /.modal -->
+
+	<div class="modal modal-success fade" id="modal-success">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">提示</h4>
+				</div>
+				<div class="modal-body">
+					<p id="successId">!</p>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+
+	<!-- /.modal -->
+	<div class="modal modal-info fade" id="modal-info">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">提示</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group has-feedback">
+						<p>正在上传......</p>
+					</div>
+
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- jQuery 2.2.3 -->
+	<script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script> -->
+	<!-- Bootstrap 3.3.6 -->
+	<script src="../../bootstrap/js/bootstrap.min.js"></script>
+	<!-- FastClick -->
+	<script src="../../plugins/fastclick/fastclick.js"></script>
+	<!-- AdminLTE App -->
+	<script src="../../dist/js/app.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="../../dist/js/demo.js"></script>
+	<!-- DataTables -->
+	<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+	<!-- <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script> -->
+	<script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="../../plugins/datatables/dataTables.select.min.js"></script>
+	<!-- Select2 -->
+	<script src="../bower_components/select2/dist/js/select2.full.min.js"></script>
+	<script
+		src="../bower_components/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+	<script
+		src="../bower_components/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+
+	<script type="text/javascript">
+	    var delWaterId = 0;
+	    var delUserName = null;
+	    var isFirst = true;
+	    var mytable = $('#example1').DataTable({
+			 "paging": true,
+		      "lengthChange": true,
+		      "searching": false,
+		      "ordering": true,
+		      "info": true,
+		      "autoWidth": true,
+		      "select":true,
+		      language: {
+		    	          "sProcessing": "处理中...",
+		    	          "sLengthMenu": "显示 _MENU_ 项结果",
+		    	          "sZeroRecords": "没有匹配结果",
+		    	          "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+		    	          "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+		    	          "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+		    	          "sInfoPostFix": "",
+		    	          "sSearch": "搜索:",
+		    	          "sUrl": "",
+		    	          "sEmptyTable": "表中数据为空",
+		    	          "sLoadingRecords": "载入中...",
+		    	          "sInfoThousands": ",",
+		    	          "oPaginate": {
+		    	              "sFirst": "首页",
+		    	              "sPrevious": "上页",
+		    	              "sNext": "下页",
+		    	              "sLast": "末页"
+		    	          },
+		    	          "oAria": {
+		    	              "sSortAscending": ": 以升序排列此列",
+		    	              "sSortDescending": ": 以降序排列此列"
+		    	          }
+		    	      }
+		    });
+		$(function() {
+			$('.select2').select2();
+			
+			$("#waterTimeId").datetimepicker({
+				language:'zh-CN',
+			    format: 'yyyy-mm',
+			    startView:'year',
+			    minView:'year',
+			    autoclose:true
+			});
+			 $('#createTimeId').datetimepicker({
+				language:'zh-CN',
+			    format: 'yyyy-mm-dd',
+			    startView:'month',
+			    minView:'month',
+			    autoclose:true
+			}); 
+			
+			getRegionList();
+			refreshDataList();			
+			$("#upLoadFile").click(function() {
+				$("#upInputId").click();
+			});
+			$("#addWaterBtn").click(function(){
+				top.addTabs({
+					id : 'addwater_tab',
+					title : '新增供水数据',
+					close : true,
+					url : 'waterdata/addwater.html',
+					urlType : "relative"
+					});
+			})
+			$("#editWaterBtn").click(function(){
+				var data = mytable.rows( { selected: true } ).data();
+				if(data.length==1){
+					var obj = data[0].object;
+					if(obj.checkStatus==0  || obj.checkStatus==2 || obj.checkStatus==4){
+						top.addTabs({
+							id : 'editwater_tab_'+obj.id,
+							title : '编辑供水数据',
+							close : true,
+							url : 'waterdata/editwater.html?id='+obj.id+'&regionName='+obj.regionName+'&waterTime='+obj.waterTime+'&waterValue='+obj.waterValue,
+							urlType : "relative"
+						});
+					}else{
+						$("#dangerId").html("只能编辑审核状态为'待提交审核'或'退回'的数据！！'");
+	            		$("#modal-danger").modal("show");
+					}
+					
+				}
+			})
+			$("#delWaterBtn").click(function(){
+				var data = mytable.rows( { selected: true } ).data();
+				console.log(data);
+				if(data.length>0){
+					var delWaterId = "";
+					for(var i=0;i<data.length;i++){
+						var obj = data[i].object;
+						if(obj.checkStatus==0 || obj.checkStatus==2 || obj.checkStatus==4){
+							delWaterId +=obj.id+",";
+						}else{
+							$("#dangerId").html("只能删除审核状态为'待提交审核'或'退回'的数据！！'");
+		            		$("#modal-danger").modal("show");	
+		            		return;
+						}						
+					}
+					var queryData = {
+							idList:delWaterId
+					};
+					console.log(delWaterId);
+					$.ajax({
+						url:"/taizhang/water/deleteWater",
+						type:"post",
+						data:JSON.stringify(queryData),
+						contentType:"application/json; charset=UTF-8",
+						dataType:"json",
+						success:function(data){
+							$('#successId').html("删除成功！！！");
+							$('#modal-success').modal('show');
+							setTimeout(() => {
+								$('#modal-success').modal('hide');
+							}, 1000);
+							refreshDataList();
+						}
+					});
+					
+				}
+			})
+			$("#submitCheck").click(function(){				
+				var data = mytable.rows( { selected: true } ).data();
+				if(data.length>0){
+					var delWaterId = "";
+					for(var i=0;i<data.length;i++){
+						var obj = data[i].object;
+						console.log(obj);
+						if(obj.checkStatus==0 || obj.checkStatus==2 || obj.checkStatus==4){
+							delWaterId +=obj.id+",";
+						}else{
+							$("#dangerId").html("只能提交审核状态为'待提交审核'或'退回'的数据！！'");
+		            		$("#modal-danger").modal("show");	
+		            		return;
+						}
+						
+					}
+					var queryData = {
+							idList:delWaterId,
+							checkStatus:1
+					};
+					console.log(delWaterId);
+					$.ajax({
+						url:"/taizhang/water/updateStatus",
+						type:"post",
+						data:JSON.stringify(queryData),
+						contentType:"application/json; charset=UTF-8",
+						dataType:"json",
+						success:function(data){
+							$('#successId').html("提交成功！！！");
+							$('#modal-success').modal('show');
+							setTimeout(() => {
+								$('#modal-success').modal('hide');
+							}, 1000);
+							refreshDataList();
+						}
+					});
+					
+				}
+				
+			})
+			$("#searchBtn").click(function(){
+				refreshDataList();
+			});
+			
+			
+			
+			
+			
+			
+		});
+		function refreshDataList(){
+			 var queryData = {
+					 waterTime:$("#waterTimeId").val(),
+					 createTime:$("#createTimeId").val(),
+					 regionIdList:$("#regionSelId").val(),
+					 checkStatus:$("#checkSelId").val()
+				};
+			 $.ajax({
+				url:"/taizhang/water/waterList",
+				type:"post",
+				data:JSON.stringify(queryData),
+				dataType:"json",
+				contentType:"application/json;charset=UTF-8",
+				success:function(data){
+					console.log("search success");
+					//mytable.clear().draw();
+					var dataArr = [];
+					$("#tbodyId").empty();
+					var waterList = data.waterList;
+					for (var i in waterList){
+						var obj = waterList[i];
+						var date = new Date(obj.waterTime); 
+						 
+						var water = {
+							'项目':obj.regionName,
+							'月份':date.getFullYear()+"-"+(date.getMonth()+1),
+							'供水量':obj.waterValue,
+							'审核状态':getCheckName(obj.checkStatus),
+							'object':obj
+						}
+						dataArr.push(water);						
+					} 
+					 mytable = $('#example1').DataTable({
+						"destroy":true,
+						data:dataArr,
+				        columns: [
+				            { data: '项目' },
+				            { data: '月份' },
+				            { data: '供水量' },
+				            { data: '审核状态' }
+				        ],
+				        "paging": true,
+					      "lengthChange": true,
+					      "searching": false,
+					      "ordering": true,
+					      "info": true,
+					      "autoWidth": true,
+					      "select":true,
+					      language: {
+					    	          "sProcessing": "处理中...",
+					    	          "sLengthMenu": "显示 _MENU_ 项结果",
+					    	          "sZeroRecords": "没有匹配结果",
+					    	          "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+					    	          "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+					    	          "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+					    	          "sInfoPostFix": "",
+					    	          "sSearch": "搜索:",
+					    	          "sUrl": "",
+					    	          "sEmptyTable": "表中数据为空",
+					    	          "sLoadingRecords": "载入中...",
+					    	          "sInfoThousands": ",",
+					    	          "oPaginate": {
+					    	              "sFirst": "首页",
+					    	              "sPrevious": "上页",
+					    	              "sNext": "下页",
+					    	              "sLast": "末页"
+					    	          },
+					    	          "oAria": {
+					    	              "sSortAscending": ": 以升序排列此列",
+					    	              "sSortDescending": ": 以降序排列此列"
+					    	          }
+					    	      }
+					 }); 
+					
+					
+				},
+				error:function(xhr,status,error){
+					console.log(xhr);
+					console.log(status);
+					console.log(error);
+				}
+			}); 
+		}
+		function edit_user(waterId,obj) {
+			console.log(waterId);
+			console.log(obj);
+			/* top.addTabs({
+				id : 'edituser_tab_' + userid,
+				title : '编辑用户_'+username,
+				close : true,
+				url : 'user/edituser.html?userid=' + userid,
+				urlType : "relative"
+			}); */
+		}
+		function del_user(waterId,obj){
+			console.log(waterId);
+			console.log(obj);
+			/* delWaterId = userid;
+			delUserName = username;
+			$("#confirmDelId").html("确认删除 "+username+" 吗??"); */
+		}
+		 function uploadFile() {
+		        var files = $('#upInputId').prop('files');//获取到文件列表
+		        if (files.length > 0) {
+		        	var data = new FormData();
+			        data.append('fileinfo', files[0]);
+			        $("#modal-info").modal("show");
+			          $.ajax({
+			            url: '/taizhang/water/uploadFile',
+			            type: 'POST',
+			            data: data,
+			            cache: false,
+			            processData: false,
+			            contentType: false,
+			            success:function(data){
+			            	$("#modal-info").modal("hide");
+			            	if(data.result == "success"){
+			            		$('#successId').html("上传成功！！！");
+			    				$('#modal-success').modal('show');	
+			            	}else{
+			            		$("#dangerId").html("上传失败，失败原因："+data.result);
+			            		$("#modal-danger").modal("show");			            		
+			            	}
+			            },
+			            error:function(){
+			            	console.log("upload error");
+			            }
+			        });  
+		        }		      
+		};
+		function getCheckName(status){
+			switch (status) {
+			case 0:
+				return '待提交审核';
+				break;
+			case 1:
+				return '待科室审核';
+				break;
+			case 2:
+				return '科室审核退回';
+				break;
+			case 3:
+				return '待中心审核';
+				break;
+			case 4:
+				return '中心审核退回'
+				break;
+			case 5:
+				return '归档'
+				break;
+
+			default:
+				return '';
+				break;
+			}
+		}
+		function getRegionList(){
+			 var queryData = {name:""};
+			 $.ajax({
+				url:"/taizhang/water/regionList",
+				type:"post",
+				data:JSON.stringify(queryData),
+				dataType:"json",
+				contentType:"application/json;charset=UTF-8",
+				success:function(data){
+					var regionList = data.regionList;
+					console.log("search roleList success");
+					var regionIdList = [];
+					$("#regionSelId").empty();					
+					for (var i in regionList){						
+						var opt = $("<option></option>");
+						opt.html(regionList[i].name);
+						opt.attr("value",regionList[i].id);
+						$("#regionSelId").append(opt);
+						regionIdList.push(regionList[i].id);
+					} 		
+					$("#regionSelId").val(regionIdList);
+					$("#regionSelId").trigger("change");
+				},
+				error:function(xhr,status,error){
+					console.log(xhr);
+					console.log(status);
+					console.log(error);
+				}
+			}); 
+		}
+	</script>
+</body>
+</html>

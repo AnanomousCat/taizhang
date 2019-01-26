@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>用户管理</title>
+<!-- Tell the browser to be responsive to screen width -->
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+
+<!-- Pace -->
+<link rel="stylesheet"
+	href="../../plugins/pace-master/themes/blue/pace-theme-flash.css">
+<script type="text/javascript"
+	src="../../plugins/pace-master/pace.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="../../dist/css/font-awesome.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="../../dist/css/ionicons.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
+<!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+<link rel="stylesheet" href="../../dist/css/skins/all-skins.min.css">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<style>
+.example-modal .modal {
+	position: relative;
+	top: auto;
+	bottom: auto;
+	right: auto;
+	left: auto;
+	display: block;
+	z-index: 1;
+}
+
+.example-modal .modal {
+	background: transparent !important;
+}
+</style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+	<!-- Main content -->
+	<section class="content">
+		
+		<!-- form start -->
+		<form class="form-horizontal">
+			<div class="box-body">
+				<div class="form-group">
+					<label for="inputEmail3" class="col-sm-1 control-label pull-left">用户名:</label>
+
+					<div class="col-sm-3">
+						<input type="email" class="form-control" id="inputEmail3"
+							placeholder="名称">
+					</div>
+					<div class="col-sm-7">
+						<button type="submit" class="btn btn-info pull-left">查询</button>
+					</div>
+
+					<div class="col-sm-1">
+						<button id="addUserBtn" type="submit"
+							class="btn btn-info pull-center">新增</button>
+					</div>
+				</div>
+
+			</div>
+		</form>
+		<!-- /.box-body -->
+		<div class="box">
+			<div class="box-header"></div>
+			<!-- /.box-header -->
+			<div class="box-body">
+				<table id="example1" class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th>Rendering engine</th>
+							<th>Browser</th>
+							<th>Platform(s)</th>
+							<th>Engine version</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Trident</td>
+							<td>Internet Explorer 4.0</td>
+							<td>Win 95+</td>
+							<td>4</td>
+							<td><a href="#" onclick="edit_user('12')">编辑</a>｜
+							   <a href="#" data-toggle="modal" data-target="#modal-danger" onclick="del_user('14')" >删除</a> 
+						
+              				</td>
+						</tr>
+						<tr>
+							<td>Trident</td>
+							<td>Internet Explorer 5.0</td>
+							<td>Win 95+</td>
+							<td>5</td>
+							<td><a href="#">编辑</a>｜<a href="#">删除</a></td>
+						</tr>
+						<tr>
+							<td>Trident</td>
+							<td>Internet Explorer 5.5</td>
+							<td>Win 95+</td>
+							<td>5.5</td>
+							<td><a href="#">编辑</a>｜<a href="#">删除</a></td>
+						</tr>
+						<tr>
+							<td>Trident</td>
+							<td>Internet Explorer 6</td>
+							<td>Win 98+</td>
+							<td>6</td>
+							<td><a href="#">编辑</a>｜<a href="#">删除</a></td>
+						</tr>
+						<tr>
+							<td>Trident</td>
+							<td>Internet Explorer 7</td>
+							<td>Win XP SP2+</td>
+							<td>7</td>
+							<td><a href="#">编辑</a>｜<a href="#">删除</a></td>
+						</tr>
+						<tr>
+							<td>Trident</td>
+							<td>AOL browser (AOL desktop)</td>
+							<td>Win XP</td>
+							<td>6</td>
+							<td><a href="#">编辑</a>｜<a href="#">删除</a></td>
+						</tr>
+						<tr>
+							<td>Gecko</td>
+							<td>Firefox 1.0</td>
+							<td>Win 98+ / OSX.2+</td>
+							<td>1.7</td>
+							<td><a href="#">编辑</a>｜<a href="#">删除</a></td>
+						</tr>
+						<tr>
+							<td>Gecko</td>
+							<td>Firefox 1.5</td>
+							<td>Win 98+ / OSX.2+</td>
+							<td>1.8</td>
+							<td><a href="#">编辑</a>｜<a href="#">删除</a></td>
+						</tr>
+						<tr>
+							<td>Gecko</td>
+							<td>Firefox 2.0</td>
+							<td>Win 98+ / OSX.2+</td>
+							<td>1.8</td>
+							<td>编辑｜删除</td>
+						</tr>
+						<tr>
+							<td>Gecko</td>
+							<td>Firefox 3.0</td>
+							<td>Win 2k+ / OSX.3+</td>
+							<td>1.9</td>
+							<td><a href="#">编辑</a>｜<a href="#">删除</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+		</div>
+		<!-- /.modal -->
+
+        <div class="modal modal-danger fade" id="modal-danger">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">警告</h4>
+              </div>
+              <div class="modal-body">
+                <p>确认删除该用户吗？？？</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">关闭</button>
+                <button id="delBtn" type="button" class="btn btn-outline" data-dismiss="modal" >确认删除</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+        
+       <!-- /.modal -->
+
+        <div class="modal modal-success fade" id="modal-success">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提示</h4>
+              </div>
+              <div class="modal-body">
+                <p>删除成功!</p>
+              </div>              
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+    </div>
+	</section>
+	
+	<!-- jQuery 2.2.3 -->
+	<script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<!-- Bootstrap 3.3.6 -->
+	<script src="../../bootstrap/js/bootstrap.min.js"></script>
+	<!-- FastClick -->
+	<script src="../../plugins/fastclick/fastclick.js"></script>
+	<!-- AdminLTE App -->
+	<script src="../../dist/js/app.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="../../dist/js/demo.js"></script>
+
+	<script type="text/javascript">
+	    var delUserId = 0;
+		$(function() {
+
+			$("#addUserBtn").click(function() {
+				top.addTabs({
+					id : 'addusertab',
+					title : '添加用户',
+					close : true,
+					url : 'user/adduser.html',
+					urlType : "relative"
+				});
+			})
+			$("#delBtn").click(function() {
+				console.log(delUserId);
+				if(delUserId != 0){
+					console.log('删除用户');
+					delUserId = 0;
+					$('#modal-success').modal('show');
+					setTimeout(() => {
+						$('#modal-success').modal('hide');
+					}, 1000);
+				}else{
+					console.log('没有选中用户')
+				}
+			})
+		});
+		function edit_user(userid) {
+			top.addTabs({
+				id : 'edituser_tab_' + userid,
+				title : '编辑用户',
+				close : true,
+				url : 'user/edituser.html?userid=' + userid,
+				urlType : "relative"
+			});
+		}
+		function del_user(userid){
+			delUserId = userid;
+		}
+		
+	</script>
+</body>
+</html>

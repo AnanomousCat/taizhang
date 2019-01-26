@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>编辑用户</title>
+<!-- Tell the browser to be responsive to screen width -->
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<!-- Bootstrap 3.3.6 -->
+<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="../../dist/css/font-awesome.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="../../dist/css/ionicons.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
+<!-- iCheck -->
+<link rel="stylesheet" href="../../plugins/iCheck/square/blue.css">
+<!-- Select2 -->
+<link rel="stylesheet"
+	href="../bower_components/select2/dist/css/select2.min.css">
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body class="hold-transition register-page">
+	<div class="register-box">
+		<div class="register-logo">
+			<a href="#">修改用户信息</a>
+		</div>
+
+		<div class="register-box-body">
+			<form method="post">
+				<div class="form-group has-feedback">
+					<label for="userNameId">用户名：</label> <input id="userNameId"
+						type="text" class="form-control" placeholder=""> <span
+						class="glyphicon glyphicon-user form-control-feedback"></span>
+				</div>
+				<div class="form-group has-feedback">
+					<label for="pswd1">密码：</label> <input id="pswd1" type="password"
+						class="form-control" placeholder=""> <span
+						class="glyphicon glyphicon-lock form-control-feedback"></span>
+				</div>
+				<div class="form-group has-feedback">
+					<label for="pswd2">确认密码：</label> <input id="pswd2" type="password"
+						class="form-control" placeholder=""> <span
+						class="glyphicon glyphicon-log-in form-control-feedback"></span>
+				</div>
+				<div class="form-group">
+					<label for="roleSelId">角色：</label> <select id="roleSelId"
+						class="form-control select2" multiple="multiple"
+						data-placeholder="">
+						<option value="0">Alabama</option>
+						<option value="1">Alaska</option>
+					</select>
+				</div>
+				<div class="row">
+					<div class="col-xs-8"></div>
+					<!-- /.col -->
+					<div class="col-xs-4">
+						<button id="saveUserBtn" type="button"
+							class="btn btn-primary btn-block btn-flat">修改</button>
+					</div>
+					<!-- /.col -->
+				</div>
+			</form>
+		</div>
+		<div class="modal modal-success fade" id="modal-success">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title">提示</h4>
+					</div>
+					<div class="modal-body">
+						<p>修改成功!</p>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
+
+		<div class="modal modal-danger fade" id="modal-danger">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title">错误</h4>
+					</div>
+					<div class="modal-body">
+						<p id="dangerId">!</p>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+  </div>
+  <!-- /.login-box-body -->
+		<!-- /.form-box -->
+	</div>
+	<!-- /.register-box -->
+
+	<!-- jQuery 2.2.3 -->
+	<script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<!-- Bootstrap 3.3.6 -->
+	<script src="../../bootstrap/js/bootstrap.min.js"></script>
+	<!-- iCheck -->
+	<script src="../../plugins/iCheck/icheck.min.js"></script>
+	<!-- Select2 -->
+	<script src="../bower_components/select2/dist/js/select2.full.min.js"></script>
+	<script>
+  $(function () {
+	  
+	var roleIdList = [];
+	$('.select2').select2()
+    $("#saveUserBtn").click(function(){
+    	var name = $("#userNameId").val().trim();
+		var pswd1 = $("#pswd1").val().trim();
+		var pswd2 = $("#pswd2").val().trim();
+		var roleidList = $("#roleSelId").val();
+		 if(name==null || name==''){
+			//alert('用户名不能为空');
+			$('#dangerId').html("用户名不能为空");
+			$('#modal-danger').modal('show');
+			return;
+		}
+		if(pswd1==null || pswd1==''||pswd2==null || pswd2==''){
+			//alert('密码不能为空');
+			 $('#dangerId').html("密码不能为空");
+				$('#modal-danger').modal('show');
+			return;
+		}
+		if(pswd1!=pswd2){
+			//alert('两次输入的密码不一样');
+			$('#dangerId').html("两次输入的密码不一样");
+			$('#modal-danger').modal('show');
+			return;
+		}
+		
+		if(roleidList==null || roleidList==''){
+			//alert('角色不能为空');
+			$('#dangerId').html("角色不能为空");
+			$('#modal-danger').modal('show');
+			return;
+		} 
+    	var user = {
+    			id:userid,
+        		name:name,
+        		pswd:pswd1,
+        		roleidList: roleidList
+        	};
+       	$.ajax({
+       		url:"/taizhang/sys/updateUser",
+       		type:"post",
+       		data:JSON.stringify(user),
+       		dataType:"json",
+       		contentType:"application/json;charset=UTF-8",
+       		success:function(data){
+       			
+       			if(data.result=="success"){
+       				console.log('修改用户成功！');
+           			
+    				$('#modal-success').modal('show');
+    				setTimeout(() => {
+    					$('#modal-success').modal('hide');
+    				}, 1000);
+       			}else{
+       				alert(data.result);
+       			}
+       			
+       		}
+       	});
+    })
+    var userid = getQueryString('userid');
+    console.log(userid);
+    getUserInfo(userid);
+   
+  });
+ 
+  function getUserInfo(userid){
+	  $.ajax({
+			url:"/taizhang/sys/getUserById",
+			type:"post",
+			data:{userid:userid},
+			contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+			dataType:"json",
+			success:function(data){
+				
+				console.log("search success");
+				$("#roleSelId").empty();
+				var roleList = data.roleList
+				for (var i in roleList){						
+					var opt = $("<option></option>");
+					opt.html(roleList[i].name);
+					opt.attr("value",roleList[i].id);
+					$("#roleSelId").append(opt);
+				} 
+			
+				
+				var user = data.user;
+				$("#userNameId").val(user.name);
+				$("#pswd1").val(user.pswd);
+				$("#pswd2").val(user.pswd);
+				var userRoleList = user.roleList;
+				roleIdList = [];
+				for(var i in userRoleList){
+					roleIdList.push(userRoleList[i].id);
+				}
+				
+				$("#roleSelId").val(roleIdList);
+				$("#roleSelId").trigger("change");
+			},
+			error:function(){
+				console.log("error");
+			}
+		});
+  }
+  function getQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null) return unescape(r[2]); return null;
+   }
+
+	
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="taizhang.modulewater.mapper.WaterMapper">
+	<resultMap type="taizhang.modulewater.bean.RegionInfo"
+		id="regionMap">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+
+		<result column="isfarming" property="isFarming" />
+		<result column="isindustry" property="isIndustry" />
+		<result column="issheng" property="isShengTai" />
+
+	</resultMap>
+	<resultMap type="taizhang.modulewater.bean.Water"
+		id="waterMap">
+		<id column="id" property="id" />
+		<result column="regionId" property="regionId" />
+		<result column="waterValue" property="waterValue" />
+		<result column="checkstatus" property="checkStatus" />
+		<result column="createTime" property="createTime" />
+	</resultMap>
+	
+	<select id="getRegionList" resultMap="regionMap">
+		select * from zy_region;
+	</select>
+	<!--  数据统计-->
+	<select id="executeSql" resultType="java.util.LinkedHashMap">
+    	${_parameter}
+	</select>
+	<!-- 查询数据 -->
+	<select id="getWaterList"  	resultMap="waterMap">
+		SELECT   w.id,re.name regionName,w.waterTime,w.waterValue,w.checkstatus
+			FROM zy_water w,zy_region re
+			where w.regionid = re.id  and checkStatus = ${checkStatus}
+			<if test=" regionIdList!=null and regionIdList!=''">
+				and re.id in (${regionIdList})
+			</if>
+			<if test=" createTime != null and createTime!=''">
+				and createTime=to_date('${createTime}','yyyy-mm-dd')
+			</if>
+			<if test=" waterTime!=null and waterTime!=''">
+				and  to_char(waterTime,'yyyy-mm')='${waterTime}'
+			</if>
+			
+	</select>	
+	<!-- 新增数据 -->
+	<insert id="addWaterData"
+		parameterType="taizhang.modulewater.bean.Water">
+		insert into zy_water(id,regionId,waterTime,waterValue,createTime,checkStatus)
+		  values(nextval('seq_waterid'),#{regionId},#{waterTime},#{waterValue},current_date,#{checkStatus})
+	</insert>
+	<!-- 修改数据 -->
+	<update id="updateWaterData">
+		update zy_water
+			 set waterValue=${waterValue} 
+			 	where id=${id}
+	</update>
+	<!-- 删除数据 -->
+	<delete id="deleteWaterDataById">
+		delete from zy_water
+			where id in (${idList})
+	</delete>
+		
+	<!-- 更新进度 -->
+	<update id="updateCheckStatus">
+		update zy_water set checkstatus=${status} where id in(${idList})
+	</update>
+	
+	<!-- 字典值获取 -->
+	<select id="getCheckStatusDic" resultType="java.util.LinkedHashMap">
+		select * from zy_dictionary where tablename='zy_water' and column='status'
+	</select>
+	
+	
+	<resultMap type="taizhang.modulewater.bean.DataCheck"
+		id="checkMap">
+		<id column="id" property="id" />
+		<result column="waterId" property="waterId" />
+
+		<result column="checkUser" property="checkUser" />
+		<result column="checkTime" property="checkTime" />
+		<result column="status" property="status" />
+
+	</resultMap>
+	
+	<insert id="addCheckData"
+		parameterType="taizhang.modulewater.bean.DataCheck">
+		insert into zy_check(id,waterId,checkUser,checkTime,status)
+		  values(nextval('seq_checkid'),#{waterId},#{checkUser},current_date,#{status})
+	</insert>
+</mapper>

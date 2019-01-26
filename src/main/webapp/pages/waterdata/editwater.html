@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>编辑用户</title>
+<!-- Tell the browser to be responsive to screen width -->
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<!-- Bootstrap 3.3.6 -->
+<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="../../dist/css/font-awesome.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="../../dist/css/ionicons.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
+<!-- iCheck -->
+<link rel="stylesheet" href="../../plugins/iCheck/square/blue.css">
+<!-- Select2 -->
+<link rel="stylesheet"
+	href="../bower_components/select2/dist/css/select2.min.css">
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body class="hold-transition register-page">
+	<div class="register-box">
+		<div class="register-logo">
+			<a href="#">编辑供水数据</a>
+		</div>
+
+		<div class="register-box-body">
+			<form method="post">
+				<div class="form-group has-feedback">
+					<label for="userNameId">项目类型：</label> <input type="text"
+						id="regionNameId" class="form-control" placeholder=""
+						readonly="readonly">
+				</div>
+
+				<div class="form-group has-feedback">
+					<label for="pswd1">供水月份：</label> <input id="waterTimeId"
+						readonly="readonly" class="form-control" placeholder="">
+				</div>
+				<div class="form-group has-feedback">
+					<label for="waterValueId">供水量：</label> <input id="waterValueId"
+						class="form-control" placeholder="">
+				</div>
+				<div class="row">
+					<div class="col-xs-8"></div>
+					<!-- /.col -->
+					<div class="col-xs-4">
+						<button id="saveWaterBtn" type="button"
+							class="btn btn-primary btn-block btn-flat">修改</button>
+					</div>
+					<!-- /.col -->
+				</div>
+			</form>
+		</div>
+		<div class="modal modal-success fade" id="modal-success">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title">提示</h4>
+					</div>
+					<div class="modal-body">
+						<p>修改成功!</p>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<div class="modal modal-danger fade" id="modal-danger">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title">错误</h4>
+					</div>
+					<div class="modal-body">
+						<p id="dangerId">!</p>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.form-box -->
+	</div>
+	<!-- /.register-box -->
+
+	<!-- jQuery 2.2.3 -->
+	<script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<!-- Bootstrap 3.3.6 -->
+	<script src="../../bootstrap/js/bootstrap.min.js"></script>
+	<!-- iCheck -->
+	<script src="../../plugins/iCheck/icheck.min.js"></script>
+	<!-- Select2 -->
+	<script src="../bower_components/select2/dist/js/select2.full.min.js"></script>
+	<script>
+  $(function () {
+	  
+	 var waterId = getQueryString('id');
+	 var time = getQueryString('waterTime');
+	 
+	 var date = new Date(parseInt(time) ); 
+	 var waterTime = date.getFullYear()+"-"+(date.getMonth()+1)
+	 var waterValue = getQueryString('waterValue');
+	 var regionName = getQueryString('regionName');
+	
+	 
+	 $("#regionNameId").val(regionName);
+	 $("#waterTimeId").val(waterTime);
+	 $("#waterValueId").val(waterValue);
+      $("#saveWaterBtn").click(function(){
+			var waterValue = $("#waterValueId").val();
+			 
+			if(waterValue==null || waterValue==''){
+				//alert('供水量不能为空');
+				$('#dangerId').html("供水量不能为空");
+				$('#modal-danger').modal('show');
+				return;
+			}
+			
+		
+    	var water = {
+    			id:waterId,
+        		waterValue:waterValue
+        	};
+       	$.ajax({
+       		url:"/taizhang/water/updateWater",
+       		type:"post",
+       		data:JSON.stringify(water),
+       		dataType:"json",
+       		contentType:"application/json;charset=UTF-8",
+       		success:function(data){
+       			console.log('修改数据成功！');
+				$('#modal-success').modal('show');
+				setTimeout(() => {
+					$('#modal-success').modal('hide');
+				}, 1000);
+       		}
+       	});
+    })
+   
+   
+  });
+
+  function getQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null) return decodeURI(r[2]); return null;
+   }
+
+	
+</script>
+</body>
+</html>

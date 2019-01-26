@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="taizhang.modulesys.mapper.SysMapper">
+
+	<resultMap type="taizhang.modulesys.bean.UserInfo"
+		id="userMap">
+		<id column="id" property="id" />
+		<result column="username" property="name" />
+		<result column="pswd" property="pswd" />
+		<result column="createTime" property="createTime" />
+		<result column="updateTime" property="updateTime" />
+		<collection property="roleList"
+			ofType="taizhang.modulesys.bean.RoleInfo">
+			<id column="rid" property="id" />
+			<result column="rname" property="name" />
+			<result column="description" property="description" />
+		</collection>
+	</resultMap>
+	<!-- 用户 -->
+	<select id="getUserId" resultType="Int">
+		select nextval('seq_userid');
+	</select>
+	<select id="getUserList" resultMap="userMap">
+		select u.*,
+		r.id rid,
+		r.rolename rname,
+		r.description
+		from zy_user u,
+		zy_role r,zy_user_role ur
+		where u.username like '%${name}%'
+		and r.id = ur.roleid
+		and u.id = ur.userid
+	</select>
+	<select id="getUserById" resultMap="userMap">
+		select u.*,
+		r.id rid
+		from zy_user u,
+		zy_role r,zy_user_role ur
+		where u.id = #{id}
+		and r.id = ur.roleid
+		and u.id = ur.userid
+	</select>
+	<select id="getUserByName" resultMap="userMap">
+		select u.*
+		from zy_user u
+
+		where u.username = '${userName}'
+
+	</select>
+
+	<insert id="addUser"
+		parameterType="taizhang.modulesys.bean.UserInfo">
+		insert into zy_user(id,username,pswd,createTime,updateTime)
+		values(#{id},#{name},#{pswd},current_date,current_date)
+	</insert>
+
+	<update id="updateUser"
+		parameterType="taizhang.modulesys.bean.UserInfo">
+		update zy_user
+		set username = #{name},
+		pswd = #{pswd},
+		updateTime = current_date
+		where id = #{id}
+	</update>
+
+	<delete id="deleteUserById">
+		delete from zy_user where id = #{userid}
+	</delete>
+
+
+	<!-- 角色 -->
+	<resultMap type="taizhang.modulesys.bean.RoleInfo"
+		id="roleMap">
+		<id column="id" property="id" />
+		<result column="rolename" property="name" />
+		<result column="description" property="description" />
+		<result column="createTime" property="createTime" />
+		<result column="updateTime" property="updateTime" />
+		<collection property="permList"
+			ofType="taizhang.modulesys.bean.PermInfo">
+			<id column="pid" property="id" />
+			<result column="ppermname" property="name" />
+			<result column="pdescription" property="description" />
+			<result column="pcreateTime" property="createTime" />
+			<result column="pupdateTime" property="updateTime" />
+			<result column="pcode" property="code" />
+		</collection>
+	</resultMap>
+
+	<select id="getRoleList" resultMap="roleMap">
+		select r.*,pe.id
+		pid,pe.permname ppermname,pe.code pcode from zy_role r
+		left join zy_perm_role pr
+		on pr.roleid = r.id
+		left join zy_permission pe
+		on pr.permid = pe.id
+	</select>
+
+	<select id="getRoleId" resultType="Int">
+		select nextval('seq_roleid');
+	</select>
+
+	<insert id="addRole"
+		parameterType="taizhang.modulesys.bean.RoleInfo">
+		insert into
+		zy_role(id,rolename,description,createtime,updatetime)
+		values(#{id},#{name},#{description},current_date,current_date)
+	</insert>
+
+	<update id="updateRole">
+		update zy_role
+		set
+		rolename = #{name},
+		description = #{description}
+		where
+		id = #{id}
+	</update>
+
+	<delete id="deleteRoleById">
+		delete from zy_role where id = ${roleid}
+	</delete>
+
+	<!-- 添加删除 用户和角色的关系 -->
+	<insert id="addUserRole">
+		insert into zy_user_role(userid,roleid,createtime)
+		values(${userid},${roleid},current_date)
+	</insert>
+	<delete id="deleteUserRoleByUserid">
+		delete from zy_user_role where userid=${userid}
+	</delete>
+	<select id="getUserCountByRoleid" resultType="Int">
+		select count(*)
+		from zy_user_role where roleid=#{roleid}
+	</select>
+
+	<!-- 权限 -->
+	<resultMap type="taizhang.modulesys.bean.PermInfo"
+		id="permMap">
+		<id column="id" property="id" />
+		<result column="permname" property="name" />
+		<result column="description" property="description" />
+		<result column="createTime" property="createTime" />
+		<result column="updateTime" property="updateTime" />
+		<result column="code" property="code" />
+	</resultMap>
+	<select id="getPermList" resultMap="permMap">
+		select * from zy_permission
+	</select>
+	<!-- <select id="getPermissionByRoleId" resultType="taizhang.modulesys.bean.PermInfo"> 
+		select * from zy_perm_role where roleid=${roleid} </select> -->
+
+	<!-- 添加删除 角色权限关系 -->
+	<insert id="addRolePermission">
+		insert into zy_perm_role(roleid,permid,createtime)
+		values(${roleid},${permid},current_date)
+	</insert>
+
+	<delete id="deletePermissionByRoleid">
+		delete from zy_perm_role where roleid=${roleid}
+	</delete>
+
+
+	<!-- 获取用户权限 -->
+	<select id="getPermissionByUserid" resultType="string">
+		select distinct
+			p.code from
+			zy_user u,
+			zy_role r,
+			zy_permission p,
+			zy_user_role ur,
+			zy_perm_role pr
+		where u.id = ur.userid 
+			and r.id = ur.roleid 
+			and pr.roleid=r.id 
+			and p.id=pr.permid
+			and u.id=${userid}
+	</select>
+
+</mapper>

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>台账管理系统</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../dist/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="../dist/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="../dist/css/skins/all-skins.min.css">
+
+    <!--http://aimodu.org:7777/admin/index_iframe.html?q=audio&search=#-->
+    <style type="text/css">
+        html {
+            overflow: hidden;
+        }
+    </style>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="../plugins/ie9/html5shiv.min.js"></script>
+    <script src="../plugins/ie9/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="hold-transition skin-blue sidebar-mini fixed">
+<div class="wrapper">
+
+    <header class="main-header">
+        <!-- Logo -->
+        <a href="#" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>台账</b></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>台账管理系统</b></span>
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <!-- Notifications: style can be found in dropdown.less -->
+                    <li class="dropdown notifications-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-bell-o"></i>
+                            <span class="label label-warning">0</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">暂无消息提醒</li>
+                           
+                        </ul>
+                    </li>
+                    
+                    <!-- User Account: style can be found in dropdown.less -->
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="../dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                            <span class="hidden-xs" id="userNameRight">zhangyanan</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                           
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="#" id="loginOutId" class="btn btn-default btn-flat">退出登录</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Control Sidebar Toggle Button -->
+                    <li>
+                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img src="../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                </div>
+                <div class="pull-left info">
+                    <p id="userNameLeft">zhangyanan</p>
+                    <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
+                </div>
+            </div>
+           
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu">
+         
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" id="content-wrapper" style="min-height: 421px;">
+        <!--bootstrap tab风格 多标签页-->
+        <div class="content-tabs">
+            <button class="roll-nav roll-left tabLeft" onclick="scrollTabLeft()">
+                <i class="fa fa-backward"></i>
+            </button>
+            <nav class="page-tabs menuTabs tab-ui-menu" id="tab-menu">
+                <div class="page-tabs-content" style="margin-left: 0px;">
+
+                </div>
+            </nav>
+            <button class="roll-nav roll-right tabRight" onclick="scrollTabRight()">
+                <i class="fa fa-forward" style="margin-left: 3px;"></i>
+            </button>
+            <div class="btn-group roll-nav roll-right">
+                <button class="dropdown tabClose" data-toggle="dropdown">
+                    页签操作<i class="fa fa-caret-down" style="padding-left: 3px;"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" style="min-width: 128px;">
+                    <li><a class="tabReload" href="javascript:refreshTab();">刷新当前</a></li>
+                    <li><a class="tabCloseCurrent" href="javascript:closeCurrentTab();">关闭当前</a></li>
+                    <li><a class="tabCloseAll" href="javascript:closeOtherTabs(true);">全部关闭</a></li>
+                    <li><a class="tabCloseOther" href="javascript:closeOtherTabs();">除此之外全部关闭</a></li>
+                </ul>
+            </div>
+            <button class="roll-nav roll-right fullscreen" onclick="App.handleFullScreen()"><i
+                    class="fa fa-arrows-alt"></i></button>
+        </div>
+        <div class="content-iframe " style="background-color: #ffffff; ">
+            <div class="tab-content " id="tab-content">
+
+            </div>
+        </div>
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 1.0.0
+        </div>
+       <!--  <strong>Copyright &copy; no time limit <a href="#">zeyang</a>.</strong> All rights
+        reserved. -->
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+            <!-- <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+            <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+       -->  </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- Home tab content -->
+            <div class="tab-pane" id="control-sidebar-home-tab">
+                <h3 class="control-sidebar-heading">Recent Activity</h3>
+                <ul class="control-sidebar-menu">
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
+
+                                <p>Will be 23 on April 24th</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="menu-icon fa fa-user bg-yellow"></i>
+
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
+
+                                <p>New phone +1(800)555-1234</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
+
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
+
+                                <p>nora@example.com</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="menu-icon fa fa-file-code-o bg-green"></i>
+
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
+
+                                <p>Execution time 5 seconds</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <!-- /.control-sidebar-menu -->
+
+                <h3 class="control-sidebar-heading">Tasks Progress</h3>
+                <ul class="control-sidebar-menu">
+                    <li>
+                        <a href="javascript:void(0)">
+                            <h4 class="control-sidebar-subheading">
+                                Custom Template Design
+                                <span class="label label-danger pull-right">70%</span>
+                            </h4>
+
+                            <div class="progress progress-xxs">
+                                <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <h4 class="control-sidebar-subheading">
+                                Update Resume
+                                <span class="label label-success pull-right">95%</span>
+                            </h4>
+
+                            <div class="progress progress-xxs">
+                                <div class="progress-bar progress-bar-success" style="width: 95%"></div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <h4 class="control-sidebar-subheading">
+                                Laravel Integration
+                                <span class="label label-warning pull-right">50%</span>
+                            </h4>
+
+                            <div class="progress progress-xxs">
+                                <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <h4 class="control-sidebar-subheading">
+                                Back End Framework
+                                <span class="label label-primary pull-right">68%</span>
+                            </h4>
+
+                            <div class="progress progress-xxs">
+                                <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <!-- /.control-sidebar-menu -->
+
+            </div>
+            <!-- /.tab-pane -->
+            <!-- Stats tab content -->
+            <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+            <!-- /.tab-pane -->
+            <!-- Settings tab content -->
+            <div class="tab-pane" id="control-sidebar-settings-tab">
+                <form method="post">
+                    <h3 class="control-sidebar-heading">General Settings</h3>
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Report panel usage
+                            <input type="checkbox" class="pull-right" checked>
+                        </label>
+
+                        <p>
+                            Some information about this general settings option
+                        </p>
+                    </div>
+                    <!-- /.form-group -->
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Allow mail redirect
+                            <input type="checkbox" class="pull-right" checked>
+                        </label>
+
+                        <p>
+                            Other sets of options are available
+                        </p>
+                    </div>
+                    <!-- /.form-group -->
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Expose author name in posts
+                            <input type="checkbox" class="pull-right" checked>
+                        </label>
+
+                        <p>
+                            Allow the user to show his name in blog posts
+                        </p>
+                    </div>
+                    <!-- /.form-group -->
+
+                    <h3 class="control-sidebar-heading">Chat Settings</h3>
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Show me as online
+                            <input type="checkbox" class="pull-right" checked>
+                        </label>
+                    </div>
+                    <!-- /.form-group -->
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Turn off notifications
+                            <input type="checkbox" class="pull-right">
+                        </label>
+                    </div>
+                    <!-- /.form-group -->
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Delete chat history
+                            <a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
+                        </label>
+                    </div>
+                    <!-- /.form-group -->
+                </form>
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+    </aside>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+         immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.3 -->
+<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../bootstrap/js/bootstrap.min.js"></script>
+<!-- Slimscroll -->
+<script src="../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="../plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../dist/js/app.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../dist/js/demo.js"></script>
+
+<!--tabs-->
+<script src="../dist/js/app_iframe.js"></script>
+
+<!--<script src="../dist/js/jquery.blockui.min.js"></script>
+<script src="../dist/js/appx.js"></script>
+<script src="../dist/js/bootstrap-tab.js"></script>
+<script src="../dist/js/sidebarMenu.js"></script>-->
+
+<script type="text/javascript">
+    /**
+     * 本地搜索菜单
+     */
+     var permList = [];
+     var user = null;
+    function search_menu() {
+        //要搜索的值
+        var text = $('input[name=q]').val();
+
+        var $ul = $('.sidebar-menu');
+        $ul.find("a.nav-link").each(function () {
+            var $a = $(this).css("border", "");
+
+            //判断是否含有要搜索的字符串
+            if ($a.children("span.menu-text").text().indexOf(text) >= 0) {
+
+                //如果a标签的父级是隐藏的就展开
+                $ul = $a.parents("ul");
+
+                if ($ul.is(":hidden")) {
+                    $a.parents("ul").prev().click();
+                }
+
+                //点击该菜单
+                $a.click().css("border", "1px solid");
+
+//                return false;
+            }
+        });
+    }
+
+    $(function () {
+//        console.log(window.location);
+		//
+        App.setbasePath("../");
+        App.setGlobalImgPath("dist/img/");
+        $.ajax({
+			url:"/taizhang/sys/isLogin",
+			type:"post",
+			data:JSON.stringify({name:""}),
+			contentType:"application/json; charset=UTF-8",
+			dataType:"json",
+			success:function(data){
+				if(data.result=="success"){
+					console.log("已登录");
+					user = data.userInfo;
+					permList = data.permList;
+					$("#userNameRight").html(user.name);
+					$("#userNameLeft").html(user.name);
+				}else{
+					window.location.href="login.html";
+				}
+				
+				
+			}
+		});
+        addTabs({
+            id: '10008',
+            title: '供水概况',
+            close: false,
+            url: 'waterDataStastatics.html',
+            urlType: "relative"
+        });
+
+        App.fixIframeCotent();
+        
+		$("#loginOutId").click(function(){
+			$.ajax({
+				url:"/taizhang/sys/loginOut",
+				type:"post",
+				data:JSON.stringify({name:""}),
+				contentType:"application/json; charset=UTF-8",
+				dataType:"json",
+				success:function(data){
+					if(data.result=="success"){
+						console.log("已退出");
+						user = null;
+						permList = [];
+						window.location.href="login.html";
+					}
+				}
+			});
+		})
+        /*addTabs({
+         id: '10009',
+         title: '404',
+         close: true,
+         url: 'UI/buttons_iframe2.html'
+         });*/
+
+        /*
+         <li class="treeview">
+         <a href="#">
+         <i class="fa fa-edit"></i> <span>Forms</span>
+         <span class="pull-right-container">
+         <i class="fa fa-angle-left pull-right"></i>
+         </span>
+         </a>
+         <ul class="treeview-menu">
+         <li><a href="forms/general.html"><i class="fa fa-circle-o"></i> General Elements</a></li>
+         <li><a href="forms/advanced.html"><i class="fa fa-circle-o"></i> Advanced Elements</a></li>
+         <li><a href="forms/editors.html"><i class="fa fa-circle-o"></i> Editors</a></li>
+         </ul>
+         </li>
+         */
+        var menus = [
+            {
+                id: "9000",
+                text: "header",
+                icon: "",
+                isHeader: true
+            },
+            {
+            	id:"sysmana",
+            	text:"系统管理",
+            	icon:"fa fa-circle-o",
+            	children:[
+            		{
+                        id: "finduser_tab",
+                        text: "用户管理",
+                        icon: "fa fa-circle-o",
+                        url: "user/finduser.html",
+                        targetType: "iframe-tab"
+                    },
+                    {
+                        id: "rolemana_tab",
+                        text: "角色管理",
+                        icon: "fa fa-circle-o",
+                        url: "role/rolemana.html",
+                        targetType: "iframe-tab"
+                    }/* ,
+                    {
+                        id: "permmana_tab",
+                        text: "权限管理",
+                        icon: "fa fa-circle-o",
+                        url: "perm/permmana.html",
+                        targetType: "iframe-tab"
+                    } */
+            	]
+            },
+            {
+            	id:"waterdata",
+            	text:"供水管理",
+            	icon:"fa fa-circle-o",
+            	children:[            		
+                    {
+                        id: "importdata_tab",
+                        text: "数据录入",
+                        icon: "fa fa-circle-o",
+                        url: "waterdata/importdata.html",
+                        targetType: "iframe-tab"
+                    },
+                    {
+                        id: "keshicheckdata_tab",
+                        text: "科室审核",
+                        icon: "fa fa-circle-o",
+                        url: "waterdata/keshicheckdata.html",
+                        targetType: "iframe-tab"
+                    },
+                    {
+                        id: "centercheckdata_tab",
+                        text: "中心审核",
+                        icon: "fa fa-circle-o",
+                        url: "waterdata/centercheckdata.html",
+                        targetType: "iframe-tab"
+                    }
+            	]
+            }
+        ];
+        $('.sidebar-menu').sidebarMenu({data: menus});
+
+        // 动态创建菜单后,可以重新计算 SlimScroll
+        // $.AdminLTE.layout.fixSidebar();
+
+        /*if ($.AdminLTE.options.sidebarSlimScroll) {
+            if (typeof $.fn.slimScroll != 'undefined') {
+                //Destroy if it exists
+                var $sidebar = $(".sidebar");
+                $sidebar.slimScroll({destroy: true}).height("auto");
+                //Add slimscroll
+                $sidebar.slimscroll({
+                    height: ($(window).height() - $(".main-header").height()) + "px",
+                    color: "rgba(0,0,0,0.2)",
+                    size: "3px"
+                });
+            }
+        }*/
+
+    });
+</script>
+
+</body>
+</html>
