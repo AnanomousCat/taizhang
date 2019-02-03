@@ -225,67 +225,86 @@
 	    });
 	$(function() {
 		$("#agree").click(function(){
-			var data = mytable1.rows( { selected: true } ).data();
-			if(data.length>0){
-				var delWaterId = "";
-				for(var i=0;i<data.length;i++){
-					var obj = data[i].object;
-					delWaterId +=obj.id+",";
-				}
-				var queryData = {
-						idList:delWaterId,
-						checkStatus:5
-				};
-				console.log(delWaterId);
-				$.ajax({
-					url:"/taizhang/water/updateStatus",
-					type:"post",
-					data:JSON.stringify(queryData),
-					contentType:"application/json; charset=UTF-8",
-					dataType:"json",
-					success:function(data){
-						$('#successId').html("审核通过成功！！！");
-						$('#modal-success').modal('show');
-						setTimeout(() => {
-							$('#modal-success').modal('hide');
-						}, 1000);
-						refreshDataList();
-						refreshHasAgree();
+			if(top.permList.indexOf("center_check")>-1  || top.user.isAdmin == true){
+				var data = mytable1.rows( { selected: true } ).data();
+				if(data.length>0){
+					var delWaterId = "";
+					for(var i=0;i<data.length;i++){
+						var obj = data[i].object;
+						delWaterId +=obj.id+",";
 					}
-				});
-				
+					var queryData = {
+							idList:delWaterId,
+							checkStatus:5
+					};
+					console.log(delWaterId);
+					$.ajax({
+						url:"/taizhang/water/updateStatus",
+						type:"post",
+						data:JSON.stringify(queryData),
+						contentType:"application/json; charset=UTF-8",
+						dataType:"json",
+						success:function(data){
+							$('#successId').html("审核通过成功！！！");
+							$('#modal-success').modal('show');
+							setTimeout(() => {
+								$('#modal-success').modal('hide');
+							}, 1000);
+							refreshDataList();
+							refreshHasAgree();
+						}
+					});
+					
+				}else{
+					$('#successId').html("没有选中数据！！！");
+					$('#modal-success').modal('show');
+					setTimeout(() => {
+						$('#modal-success').modal('hide');
+					}, 1000);
+				}
+			}else{
+				top.showNoPermission();
 			}
 		})
 		$("#noAgree").click(function(){
-			var data = mytable1.rows( { selected: true } ).data();
-			if(data.length>0){
-				var delWaterId = "";
-				for(var i=0;i<data.length;i++){
-					var obj = data[i].object;
-					delWaterId +=obj.id+",";
-				}
-				var queryData = {
-						idList:delWaterId,
-						checkStatus:4
-				};
-				$.ajax({
-					url:"/taizhang/water/updateStatus",
-					type:"post",
-					data:JSON.stringify(queryData),
-					contentType:"application/json; charset=UTF-8",
-					dataType:"json",
-					success:function(data){
-						$('#successId').html("退回成功！！！");
-						$('#modal-success').modal('show');
-						setTimeout(() => {
-							$('#modal-success').modal('hide');
-						}, 1000);
-						refreshDataList();
-						refreshHasAgree();
+			if(top.permList.indexOf("center_check")>-1  || top.user.isAdmin == true){
+				var data = mytable1.rows( { selected: true } ).data();
+				if(data.length>0){
+					var delWaterId = "";
+					for(var i=0;i<data.length;i++){
+						var obj = data[i].object;
+						delWaterId +=obj.id+",";
 					}
-				});
-				
-			}
+					var queryData = {
+							idList:delWaterId,
+							checkStatus:4
+					};
+					$.ajax({
+						url:"/taizhang/water/updateStatus",
+						type:"post",
+						data:JSON.stringify(queryData),
+						contentType:"application/json; charset=UTF-8",
+						dataType:"json",
+						success:function(data){
+							$('#successId').html("退回成功！！！");
+							$('#modal-success').modal('show');
+							setTimeout(() => {
+								$('#modal-success').modal('hide');
+							}, 1000);
+							refreshDataList();
+							refreshHasAgree();
+						}
+					});
+				}else{
+					$('#successId').html("没有选中数据！！！");
+					$('#modal-success').modal('show');
+					setTimeout(() => {
+						$('#modal-success').modal('hide');
+					}, 1000);
+				}
+		}else{
+			top.showNoPermission();
+		}
 		});	
 		refreshDataList();
 		refreshHasAgree();

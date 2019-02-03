@@ -12,6 +12,7 @@ public class UserInfo {
 	private String pswd;
 	private String createTime;
 	private String updateTime;
+	private boolean isAdmin;
 	private List<RoleInfo> roleList;
 	
 	public int getId() {
@@ -44,12 +45,23 @@ public class UserInfo {
 	public void setUpdateTime(String updateTime) {
 		this.updateTime = updateTime;
 	}
+	
+	
 	public List<RoleInfo> getRoleList() {
 		return roleList;
 	}
 	public void setRoleList(List<RoleInfo> roleList) {
 		this.roleList = roleList;
 	}
+	public boolean getIsAdmin() {
+		return isAdmin;
+	}
+	public void setIsAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+	
+	
+	
 	
 	
 }

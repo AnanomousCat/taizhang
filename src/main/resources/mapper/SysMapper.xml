@@ -11,6 +11,7 @@
 		<result column="pswd" property="pswd" />
 		<result column="createTime" property="createTime" />
 		<result column="updateTime" property="updateTime" />
+		<result column="isAdmin" property="isAdmin" />
 		<collection property="roleList"
 			ofType="taizhang.modulesys.bean.RoleInfo">
 			<id column="rid" property="id" />

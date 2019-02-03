@@ -65,8 +65,7 @@
 				<div class="form-group">
 					<div class="col-sm-12">
 						<button id="addRoleBtn" type="button"
-							class="btn btn-info pull-right" data-toggle="modal"
-							data-target="#modal-info-add">新增</button>
+							class="btn btn-info pull-right" >新增</button>
 					</div>
 				</div>
 
@@ -248,9 +247,14 @@
 			$('.select2').select2({placeholder: "请选择权限"});
 			refreshRoleList();	
 			$("#addRoleBtn").click(function(){
-				clearAddFormValue();
+				if(top.user.isAdmin == true){
+					clearAddFormValue();
+					$('#modal-info-add').modal('show');
+				}else{
+					top.showNoPermission();
+				}
 			});
-				
+			
 			
 			$("#confirmAddBtn").click(function() {
 				
@@ -370,8 +374,8 @@
 						var del =  $("<a>删除</a>");
 						del.attr("href","#");
 						del.attr("onclick","del_role("+roleInfo.id+",'"+roleInfo.name+"')");
-						del.attr("data-toggle","modal");
-						del.attr("data-target","#modal-danger");
+						//del.attr("data-toggle","modal");
+						//del.attr("data-target","#modal-danger");
 						tdOper.append(edit);
 						tdOper.append("|");
 						tdOper.append(del);
@@ -417,32 +421,38 @@
 			}); 
 		}
 		function edit_role(roleid,rolename) {
-			for(var i in roleList){
-				if(roleList[i].id == roleid){
-					
-					editRoleId = roleid;
-					var role = roleList[i];
-					var permList = role.permList;
-					var permIdList = [];
-					for(var j in permList){
-						permIdList.push(permList[j].id);
+			if(top.user.isAdmin == true){
+				for(var i in roleList){
+					if(roleList[i].id == roleid){
+						
+						editRoleId = roleid;
+						var role = roleList[i];
+						var permList = role.permList;
+						var permIdList = [];
+						for(var j in permList){
+							permIdList.push(permList[j].id);
+						}
+						console.log(permIdList);					
+						$("#editPermSelId").val(permIdList);
+						$('#editPermSelId').trigger('change');
+						$("#editRoleNameId").val(role.name);
+						$('#modal-info-edit').modal('show');
+						break;
 					}
-					console.log(permIdList);					
-					$("#editPermSelId").val(permIdList);
-					$('#editPermSelId').trigger('change');
-					$("#editRoleNameId").val(role.name);
-					$('#modal-info-edit').modal('show');
-					
-					
-					
-					break;
-				}
-			}	
+				}	
+			}else{
+				top.showNoPermission();
+			}
 		}
 		function del_role(roleid,rolename){
-			delRoleId = roleid;
-			delRoleName = rolename;
-			$("#confirmDelId").html("确认删除 "+rolename+" 吗??");
+			if(top.user.isAdmin == true){
+				delRoleId = roleid;
+				delRoleName = rolename;
+				$("#confirmDelId").html("确认删除 "+rolename+" 吗??");
+				$('#modal-danger').modal('show');
+			}else{
+				top.showNoPermission();
+			}
 		}
 		function clearAddFormValue(){
 			$("#addRoleNameId").val("");

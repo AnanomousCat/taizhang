@@ -17,16 +17,10 @@ $(function() {
 		refreshWaterData();
 	});
 	$('.select2').select2();
-   
+ 
 	refreshTimeSelect();
 	getRegionList();
 	refreshWaterData();
-	
-	/*
-	 * $('input[type="radio"].flat-red').iCheck({ checkboxClass :
-	 * 'icheckbox_flat-green', radioClass : 'iradio_flat-green' });
-	 */
-
 });
 
 function getRegionList() {

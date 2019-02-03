@@ -17,7 +17,7 @@
 		id="waterMap">
 		<id column="id" property="id" />
 		<result column="regionId" property="regionId" />
-		<result column="waterValue" property="waterValue" />
+		<result column="waterValue" property="waterValue"  />
 		<result column="checkstatus" property="checkStatus" />
 		<result column="createTime" property="createTime" />
 	</resultMap>
@@ -49,7 +49,7 @@
 	<insert id="addWaterData"
 		parameterType="taizhang.modulewater.bean.Water">
 		insert into zy_water(id,regionId,waterTime,waterValue,createTime,checkStatus)
-		  values(nextval('seq_waterid'),#{regionId},#{waterTime},#{waterValue},current_date,#{checkStatus})
+		  values(nextval('seq_waterid'),#{regionId},#{waterTime},#{waterValue},#{createTime},#{checkStatus})
 	</insert>
 	<!-- 修改数据 -->
 	<update id="updateWaterData">

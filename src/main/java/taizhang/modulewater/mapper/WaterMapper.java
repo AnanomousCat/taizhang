@@ -13,7 +13,6 @@ import taizhang.modulewater.bean.Water;
 
 @Component
 public interface WaterMapper {
-
 	ArrayList<RegionInfo> getRegionList();
 
 	void addWaterData(Water water);

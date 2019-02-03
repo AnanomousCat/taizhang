@@ -283,7 +283,6 @@ public class WaterController {
 //	}
 	// 自定义上传文件存储目录
 	private static final String UPLOAD_DIRECTORY = "uploadFlie";
-
 	@RequestMapping("uploadFile")
 	@ResponseBody
 	public Object uploadFileHandler(@RequestParam(value = "fileinfo", required = false) MultipartFile file,
@@ -298,6 +297,10 @@ public class WaterController {
 		}
 
 		String filePath = getFilePath(file, request, response);
+		if(filePath == null) {
+			resultMap.put("result", "上传失败，失败原因：上传文件为空！");
+			return resultMap;
+		}
 		FileInputStream fileInputStream;
 		BufferedInputStream bufferedInputStream;
 		POIFSFileSystem fileSystem;
@@ -308,59 +311,40 @@ public class WaterController {
 			xss = new XSSFWorkbook(bufferedInputStream);
 			XSSFSheet sheet = xss.getSheetAt(0);
 			// 1.获取年份 第0行0列
-			int year;
-			try {
-				XSSFRow rowYear = sheet.getRow(0);
-				XSSFCell cellYear = rowYear.getCell(0);
-				String title = cellYear.getStringCellValue();
-				year = Integer.parseInt(title.substring(0, title.indexOf("年")));
-				System.out.println("年份:" + year);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			int year = parseYear(sheet);
+			if (year == 0) {
 				resultMap.put("result", "年份不正确，请确认在1行1列放有年份信息，xxxx年***供水台账");
 				return resultMap;
 			}
+			
 			// 2.获取地区 第2行 1列到9列
 			// 存列和地区名的关系
-			HashMap<Integer, String> cellRegionMap;
-			try {
-				cellRegionMap = new HashMap<Integer, String>();
-				XSSFRow rowRegion = sheet.getRow(2);
-				for (int cellNum = 1; cellNum <= 9; cellNum++) {
-					cellRegionMap.put(cellNum, rowRegion.getCell(cellNum).getStringCellValue());
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			HashMap<Integer, String> cellRegionMap = parseCellRegion(sheet);
+			if(cellRegionMap.size()==0) {
 				resultMap.put("result", "项目类型不正确,请确认第3行 第2列到10列存放有项目名称");
 				return resultMap;
 			}
+
 			// 3.获取各月份的值 第3行1列 到 第14行9列
 			ArrayList<Water> waterList = new ArrayList<Water>();
+			Date curTime = Calendar.getInstance().getTime();
 			for (int rowNum = 3; rowNum <= 14; rowNum++) {
 
 				XSSFRow row = sheet.getRow(rowNum);
 				Date waterTime = new Date(year - 1900, rowNum - 3, 1, 1, 1, 0);
-				SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-				System.out.println("供水时间为: " + ft.format(waterTime));
 				for (int cellNum = 1; cellNum <= 9; cellNum++) {
 					try {
 						Water water = new Water();
-						// 供水时间
-						water.setWaterTime(waterTime);
-						// 供水地区
-						String region = cellRegionMap.get(cellNum);
+						water.setCreateTime(curTime);
+						water.setWaterTime(waterTime);// 供水时间						
+						String region = cellRegionMap.get(cellNum);// 供水地区
 						int regionId = regionMap.get(region);
 						water.setRegionId(regionId);
 						// 供水量
 						XSSFCell cell = row.getCell(cellNum);
 						Object cellValue = null;
 						org.apache.poi.ss.usermodel.CellType cellType = cell.getCellType();
-						if (cellType == cellType.STRING) {
-							cellValue = cell.getStringCellValue();
-
-						} else if (cellType == cellType.NUMERIC) {
+						if (cellType == cellType.NUMERIC) {
 							if (DateUtil.isCellDateFormatted(cell)) {
 								cellValue = cell.getDateCellValue();
 							} else {
@@ -370,18 +354,11 @@ public class WaterController {
 								waterList.add(water);
 
 							}
-						} else if (cellType == cellType.BOOLEAN) {
-							cellValue = cell.getBooleanCellValue();
-
-						} else if (cellType == cellType.FORMULA) {
+						}  else if (cellType == cellType.FORMULA) {
 							cellValue = Double.parseDouble(cell.getCellFormula());
 							water.setWaterValue((double) cellValue);
 							waterList.add(water);
-
-						} else if (cellType == cellType.BLANK) {
-							cellValue = "";
-						}
-
+						} 
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -405,7 +382,33 @@ public class WaterController {
 		return resultMap;
 
 	}
-
+	private int parseYear(XSSFSheet sheet) {
+		int year = 0;
+		try {
+			XSSFRow rowYear = sheet.getRow(0);
+			XSSFCell cellYear = rowYear.getCell(0);
+			String title = cellYear.getStringCellValue();
+			year = Integer.parseInt(title.substring(0, title.indexOf("年")));
+			System.out.println("年份:" + year);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return year;
+	}
+	private HashMap<Integer, String> parseCellRegion(XSSFSheet sheet){
+		HashMap<Integer, String> cellRegionMap = new HashMap<Integer, String>();
+		try {
+			XSSFRow rowRegion = sheet.getRow(2);
+			for (int cellNum = 1; cellNum <= 9; cellNum++) {
+				cellRegionMap.put(cellNum, rowRegion.getCell(cellNum).getStringCellValue());
+			}
+		} catch (Exception e) {
+			cellRegionMap = null;
+			e.printStackTrace();
+		}		
+		return cellRegionMap;
+	}
 	private String getFilePath(MultipartFile file, HttpServletRequest request, HttpServletResponse response) {
 		String filePath = new String();
 		String uploadPath = request.getSession().getServletContext().getRealPath("./") + UPLOAD_DIRECTORY;
@@ -428,6 +431,8 @@ public class WaterController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}else {
+			return null;
 		}
 		return filePath;
 	}
