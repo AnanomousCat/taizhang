@@ -31,7 +31,7 @@
 	</select>
 	<!-- 查询数据 -->
 	<select id="getWaterList"  	resultMap="waterMap">
-		SELECT   w.id,re.name regionName,w.waterTime,w.waterValue,w.checkstatus
+		SELECT   w.id,re.name regionName,w.waterTime,w.waterValue,w.checkstatus,w.createTime
 			FROM zy_water w,zy_region re
 			where w.regionid = re.id  and checkStatus = ${checkStatus}
 			<if test=" regionIdList!=null and regionIdList!=''">

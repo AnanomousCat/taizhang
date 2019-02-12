@@ -139,6 +139,7 @@
 							<th>月份</th>
 							<th>供水量</th>
 							<th>审核状态</th>
+							<th>录入时间</th>
 						</tr>
 					</thead>
 					<tbody id="tbodyId">
@@ -436,12 +437,13 @@
 					for (var i in waterList){
 						var obj = waterList[i];
 						var date = new Date(obj.waterTime); 
-						 
+						var inputDate = new Date(obj.createTime); 
 						var water = {
 							'项目':obj.regionName,
 							'月份':date.getFullYear()+"-"+(date.getMonth()+1),
 							'供水量':obj.waterValue,
 							'审核状态':getCheckName(obj.checkStatus),
+							'录入时间':inputDate.getFullYear()+"-"+(inputDate.getMonth()+1)+"-"+inputDate.getDate(),
 							'object':obj
 						}
 						dataArr.push(water);						
@@ -453,7 +455,8 @@
 				            { data: '项目' },
 				            { data: '月份' },
 				            { data: '供水量' },
-				            { data: '审核状态' }
+				            { data: '审核状态' },
+				            { data: '录入时间' }
 				        ],
 				        "paging": true,
 					      "lengthChange": true,
@@ -588,6 +591,7 @@
 				}
 			}); 
 		}
+		
 	</script>
 </body>
 </html>

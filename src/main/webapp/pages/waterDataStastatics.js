@@ -8,7 +8,6 @@ var lineChart = echarts.init(document.getElementById('lineId'));
 $(function() {
 	$('table.display').dataTable();
 	$("input[name='r3']").change(function() {
-		console.log("timeType changed");
 		refreshTimeSelect();
 	});
 
@@ -35,13 +34,13 @@ function getRegionList() {
 		contentType : "application/json;charset=UTF-8",
 		success : function(data) {
 			var regionList = data.regionList;
-			console.log("search roleList success");
 			var regionIdList = [];
 			$("#regionSelId").empty();
 			for ( var i in regionList) {
 				var opt = $("<option></option>");
 				opt.html(regionList[i].name);
 				opt.attr("value", regionList[i].id);
+				
 				$("#regionSelId").append(opt);
 				regionIdList.push(regionList[i].id);
 			}
@@ -75,6 +74,7 @@ function refreshWaterData() {
 			regionIdList : $("#regionSelId").val()
 		}
 	}
+	console.log($("#regionSelId").get(0).selectedindex);
 	$.ajax({
 		url : "/taizhang/water/waterStatistics",
 		type : "post",

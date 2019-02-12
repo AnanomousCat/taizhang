@@ -54,6 +54,7 @@ public class WaterController {
 		int month = Integer.parseInt(waterTime.split("-")[1]);
 		water.setWaterTime(new Date(year - 1900, month - 1, 1));
 		water.setWaterValue(Double.parseDouble(map.get("waterValue").toString()));
+		water.setCreateTime(new Date());
 		waterMapper.addWaterData(water);
 		resultMap.put("result", "success");
 		return resultMap;
@@ -159,23 +160,26 @@ public class WaterController {
 				idStr += regionIdList.get(i) + ",";
 			}
 			regionSql += " and re.id in(" + idStr.substring(0, idStr.length() - 1) + ")";
-
+			String regionName = "";
 			for (int i = 0; i < regionList.size(); i++) {
 				RegionInfo regionInfo = regionList.get(i);
 				String id = "" + regionInfo.getId();
-				if (regionSql.indexOf(id) > -1) {
+				
+				if (regionIdList.contains(id)) {
 					reNameSql += " sum(case when re.name = '" + regionInfo.getName()
 							+ "' then w.watervalue else 0 end) as \"" + regionInfo.getName() + "\",";
+					regionName +=  "'"+regionInfo.getName()+"',";
 				}
 			}
-			reNameSql = reNameSql.substring(0, reNameSql.length() - 1);
+			regionName = regionName.substring(0, regionName.length() - 1);
+			reNameSql += "sum(case when re.name in("+regionName+") then w.watervalue else 0 end)  \"合计\"";
 		} else {
 			for (int i = 0; i < regionList.size(); i++) {
 				RegionInfo regionInfo = regionList.get(i);
 				reNameSql += " sum(case when re.name = '" + regionInfo.getName()
 						+ "' then w.watervalue else 0 end) as \"" + regionInfo.getName() + "\",";
 			}
-			reNameSql = reNameSql.substring(0, reNameSql.length() - 1);
+			reNameSql +=" sum(w.watervalue)  \"合计\"";
 		}
 
 		// 1.列表各地区 农业非农业 农业工业
@@ -332,11 +336,13 @@ public class WaterController {
 
 				XSSFRow row = sheet.getRow(rowNum);
 				Date waterTime = new Date(year - 1900, rowNum - 3, 1, 1, 1, 0);
+				Date createTime = new Date();
 				for (int cellNum = 1; cellNum <= 9; cellNum++) {
 					try {
 						Water water = new Water();
 						water.setCreateTime(curTime);
-						water.setWaterTime(waterTime);// 供水时间						
+						water.setWaterTime(waterTime);// 供水时间	
+//						water.setCreateTime(createTime);
 						String region = cellRegionMap.get(cellNum);// 供水地区
 						int regionId = regionMap.get(region);
 						water.setRegionId(regionId);

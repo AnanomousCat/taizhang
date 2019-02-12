@@ -443,11 +443,11 @@ html {
 						console.log("已登录");
 						user = data.userInfo;
 						permList = data.permList;
-						console.log(user);
 						$("#userNameRight").html(user.name);
 						$("#userNameLeft").html(user.name);
 					} else {
 						window.location.href = "login.html";
+						console.log("未登录");
 					}
 				}
 			});
